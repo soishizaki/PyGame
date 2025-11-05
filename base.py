@@ -1,21 +1,80 @@
 import pygame
 
 # --- Configurações do labirinto ---
-TAMANHO_CELULA = 94
+TAMANHO_CELULA = 800/17
 COR_PAREDE = (70, 70, 200)
 COR_CAMINHO = (200, 200, 200)
+COR_SAIDA = (80, 200, 120)
 
-LABIRINTO = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
-    [1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,],
-    [1,0,1,1,1,0,1,0,1,1,0,1,0,0,1,],
-    [1,0,1,0,0,0,0,0,1,0,0,0,1,0,1,],
-    [1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,],
-    [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,],
-    [1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,],
-    [1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,],
+# MAPA FÁCIL
+LABIRINTO_FACIL =  [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,1,0,0,0,1,0,0,1,0,0,0,1,0,2,1],
+    [1,0,1,0,1,0,1,0,1,1,1,1,0,1,0,1,1],
+    [1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1],
+    [1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1],
+    [1,0,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1],
+    [1,0,1,0,0,0,0,1,0,0,0,0,1,0,1,0,1],
+    [1,0,1,0,1,1,0,1,1,1,1,0,1,0,1,0,1],
+    [1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1],
+    [1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1],
+    [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1],
+    [1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
+    [1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ]
+
+LABIRINTO_DIFICIL = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,1,0,0,0,0,0,0,0,0,2,1],
+    [1,0,1,1,1,1,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,1,0,1,0,1],
+    [1,1,1,1,1,1,1,1,1,0,1,0,1],
+    [1,0,0,0,0,0,0,0,0,0,1,0,1],
+    [1,0,1,0,1,1,1,1,1,0,1,0,1],
+    [1,0,1,0,0,0,0,0,1,0,1,0,1],
+    [1,0,1,1,1,1,1,0,1,0,1,0,1],
+    [1,0,1,0,0,0,1,0,1,0,1,0,1],
+    [1,0,1,1,1,0,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1],
+]
+
+
+
+# MAPA MÉDIO
+LABIRINTO_MEDIO = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,1,0,0,0,0,1],
+    [1,0,1,1,1,1,0,1,1],
+    [1,0,1,0,0,0,0,0,1],
+    [1,0,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,1,0,1],
+    [1,1,1,1,1,0,1,2,1],
+    [1,1,1,1,1,1,1,1,1],
+]
+
+# MAPA DIFÍCIL
+LABIRINTO_DIFICIL = [
+    [1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,1,0,0,0,0,2,1],
+    [1,0,1,0,1,0,1,1,0,1,1],
+    [1,0,1,0,0,0,1,0,0,0,1],
+    [1,0,1,1,1,0,1,0,1,0,1],
+    [1,0,0,0,0,0,0,0,1,0,1],
+    [1,1,1,1,1,1,1,0,1,0,1],
+    [1,0,0,0,0,0,1,0,0,0,1],
+    [1,0,1,1,1,0,1,1,1,0,1],
+    [1,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1],
+]
+
+# escolha padrão (pode trocar no jogo)
+LABIRINTO = LABIRINTO_FACIL
+
 
 def desenhar_labirinto(tela):
     """Desenha o labirinto na tela."""
@@ -23,11 +82,21 @@ def desenhar_labirinto(tela):
         for coluna, cell in enumerate(row):
             x = coluna * TAMANHO_CELULA
             y = linha * TAMANHO_CELULA
-            cor = COR_PAREDE if cell == 1 else COR_CAMINHO
+
+            if cell == 1:
+                cor = COR_PAREDE
+            elif cell == 2:
+                cor = COR_SAIDA
+            else:
+                cor = COR_CAMINHO
+
             pygame.draw.rect(tela, cor, (x, y, TAMANHO_CELULA, TAMANHO_CELULA))
 
+
+# --- Configurações do jogador ---
 COR_JOGADOR = (240, 230, 70)
 POS_INICIAL = [1, 1]  # linha, coluna
+
 
 def desenhar_jogador(tela, posicao):
     """Desenha o jogador (quadrado amarelo) na posição atual."""
@@ -37,6 +106,7 @@ def desenhar_jogador(tela, posicao):
     tamanho = TAMANHO_CELULA - 10
     pygame.draw.rect(tela, COR_JOGADOR, (x, y, tamanho, tamanho))
 
+
 def posicao_valida(linha, coluna):
     """Retorna True se a posição está dentro do labirinto e não é parede."""
     if linha < 0 or linha >= len(LABIRINTO):
@@ -44,4 +114,3 @@ def posicao_valida(linha, coluna):
     if coluna < 0 or coluna >= len(LABIRINTO[0]):
         return False
     return LABIRINTO[linha][coluna] != 1
-
