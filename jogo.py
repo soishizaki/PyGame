@@ -38,16 +38,25 @@ def menu_inicial():
         mouse_pos = pygame.mouse.get_pos()
         tela.fill(COR_FUNDO)
 
-        fonte_titulo = pygame.font.SysFont(None, 80, bold=True)
-        titulo = fonte_titulo.render("Escolha a dificuldade", True, COR_TEXTO)
-        tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 180))
+        # Título do jogo
+        fonte_titulo = pygame.font.SysFont(None, 100, bold=True)
+        titulo = fonte_titulo.render("Labirinto", True, COR_TEXTO)
+        tela.blit(
+            titulo,
+            (LARGURA_TELA // 2 - titulo.get_width() // 2, 180)
+        )
 
+        # Botão único de PLAY
         centro_x = LARGURA_TELA // 2
-        inicio_y = ALTURA_TELA // 2 - 100
-
-        botao_facil = desenhar_botao(tela, "Fácil",   centro_x - 150, inicio_y,       300, 80, mouse_pos)
-        botao_medio = desenhar_botao(tela, "Médio",   centro_x - 150, inicio_y + 130, 300, 80, mouse_pos)
-        botao_dif   = desenhar_botao(tela, "Difícil", centro_x - 150, inicio_y + 260, 300, 80, mouse_pos)
+        botao_play = desenhar_botao(
+            tela,
+            "Play",
+            centro_x - 150,
+            ALTURA_TELA // 2,
+            300,
+            80,
+            mouse_pos,
+        )
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -55,19 +64,14 @@ def menu_inicial():
                 sys.exit()
 
             if evento.type == pygame.MOUSEBUTTONDOWN:
-                if botao_facil.collidepoint(mouse_pos):
-                    carregar_fase(0)  # começa na fase fácil
-                    return
-                elif botao_medio.collidepoint(mouse_pos):
-                    carregar_fase(1)  # começa no médio
-                    return
-                elif botao_dif.collidepoint(mouse_pos):
-                    carregar_fase(2)  # começa no difícil
+                if botao_play.collidepoint(mouse_pos):
+                    # Não escolhe dificuldade aqui.
+                    # Começa sempre da fase 0 (fácil),
+                    # que já é o padrão em base.py
                     return
 
         pygame.display.flip()
         clock.tick(30)
-
 
 # --- Tela de vitória: Próxima fase / Sair ---
 def tela_vitoria():
@@ -76,7 +80,7 @@ def tela_vitoria():
         tela.fill(COR_FUNDO)
 
         fonte_titulo = pygame.font.SysFont(None, 80, bold=True)
-        titulo = fonte_titulo.render("VOCÊ VENCEU! 🏆", True, COR_TEXTO)
+        titulo = fonte_titulo.render("FASE COMPLETA", True, COR_TEXTO)
         tela.blit(titulo, (LARGURA_TELA // 2 - titulo.get_width() // 2, 200))
 
         centro_x = LARGURA_TELA // 2
@@ -136,6 +140,10 @@ def main():
                 if posicao_valida(nova_linha, nova_coluna):
                     pos_jogador = [nova_linha, nova_coluna]
                     if base.LABIRINTO[nova_linha][nova_coluna] == 2:
+                        vitoria = True
+                    elif base.LABIRINTO[nova_linha][nova_coluna] == 3:
+                        vitoria = True
+                    elif base.LABIRINTO[nova_linha][nova_coluna] == 4:
                         vitoria = True
 
         tela.fill(COR_FUNDO)
