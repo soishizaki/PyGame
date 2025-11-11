@@ -4,20 +4,20 @@ Jogo 2D em Python onde você controla um gatinho em um labirinto, tentando chega
 
 ## 🕹️ Como jogar
 
-- Use as **setas do teclado** para mover o gatinho:
+- Use as setas do teclado para mover o gatinho:
   - ⬆ ⬇ ⬅ ➡ para andar pelo labirinto.
-- Seu objetivo é **chegar à saída/tesouro** em cada fase.
-- Cada fase tem um **tempo limite** de 30 segundos.
-- Se o tempo zerar, você **volta para a Fase 1**.
+- Seu objetivo é chegar à saída/tesouro em cada fase.
+- Cada fase tem um tempo limite de 30 segundos.
+- Se o tempo zerar, você volta para a Fase 1.
 - Atalhos:
-  - `ESC` fecha o jogo  
-  - `ENTER` ou `ESPAÇO` confirmam botões nas telas  
-  - `I` no menu inicial abre a tela de **instruções (Info)**
+  - `ESC` fecha o jogo . 
+  - `ENTER` ou `ESPAÇO` confirmam botões nas telas.  
+  - `I` no menu inicial abre a tela de instruções.
 
 ## ▶️ Como iniciar o jogo
 
-1. Tenha **Python 3** instalado.
-2. Instale o **Pygame**:
+1. Tenha Python 3 instalado.
+2. Instale o Pygame:
    pip install pygame
 3. Execute o arquivo jogo.py
 
