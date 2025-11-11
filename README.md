@@ -36,23 +36,20 @@ youtube
 
 ## Uso de IAs generativas
 
-- As lista de cores das estrelas nas páginas de vitória foi gerada pelo chatGPT 5.
+- As lista de cores das estrelas nas páginas de vitória foi gerada pelo chatGPT 5.:
+
 CORES_ESTRELAS = [
-    (255, 255, 0),   # amarelo
-    (255, 192, 203), # rosa
-    (135, 206, 250), # azul claro
-    (144, 238, 144), # verde claro
-    (255, 165, 0),   # laranja
-    (255, 255, 255)  # branco
+    (255, 255, 0),   
+    (255, 192, 203), 
+    (135, 206, 250), 
+    (144, 238, 144), 
+    (255, 165, 0),   
+    (255, 255, 255)  
 ]
 
-- A função criar_estrela foi 80% gerada pelo chatGPT 5.
+- A função criar_estrela foi 80% gerada pelo chatGPT 5:
+
 def criar_estrela(multicolor=False):
-    """
-    Cria uma estrelinha que começa caindo de algum ponto acima da tela.
-    Se multicolor=True, escolhe uma cor aleatória da lista.
-    Caso contrário, usa amarelo.
-    """
     cor = random.choice(CORES_ESTRELAS) if multicolor else (255, 255, 0)
     return {
         "x": random.randint(0, LARGURA_TELA),
@@ -62,10 +59,10 @@ def criar_estrela(multicolor=False):
         "cor": cor
     }
 
-- Os loops das animações das estrelas foram 80% gerados pelo chatGPT 5.
+- Os loops das animações das estrelas foram 80% gerados pelo chatGPT 5:
+
 for e in estrelas:
     e["y"] += e["vel"]
-    # quando passa da parte de baixo, recria lá em cima
     if e["y"] > ALTURA_TELA + 10:
         novo = criar_estrela()
         e["x"] = novo["x"]
