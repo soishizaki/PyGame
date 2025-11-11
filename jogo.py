@@ -36,20 +36,25 @@ IMG_PROXIMA = pygame.transform.smoothscale(IMG_PROXIMA, (LARGURA_TELA, ALTURA_TE
 IMG_FINAL = pygame.image.load("img/fim.png").convert()
 IMG_FINAL = pygame.transform.smoothscale(IMG_FINAL, (LARGURA_TELA, ALTURA_TELA))
 
+# NOVO: tela de instruções (infos)
+IMG_INFO = pygame.image.load("img/infos.png").convert()
+IMG_INFO = pygame.transform.smoothscale(IMG_INFO, (LARGURA_TELA, ALTURA_TELA))
 
-# --- Tela de menu inicial ---
-def menu_inicial():
-    botao_play = pygame.Rect(LARGURA_TELA // 2 - 180, 620, 360, 90)
+
+# --- Tela de informações (Instructions) ---
+def tela_infos():
+    # Retângulo clicável do BACK (ajuste conforme a posição do seu botão na arte)
+    botao_back = pygame.Rect(600, 712, 142, 60)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
-        tela.blit(IMG_INICIO, (0, 0))
+        tela.blit(IMG_INFO, (0, 0))
 
-        # brilho opcional ao passar o mouse
-        if botao_play.collidepoint(mouse_pos):
-            s = pygame.Surface((botao_play.width, botao_play.height), pygame.SRCALPHA)
-            s.fill((255, 255, 255, 25))
-            tela.blit(s, botao_play.topleft)
+        # realce sutil no botão back quando o mouse passa por cima (opcional)
+        s = pygame.Surface((botao_back.width, botao_back.height), pygame.SRCALPHA)
+        if botao_back.collidepoint(mouse_pos):
+            s.fill((255, 255, 255, 36))
+            tela.blit(s, botao_back.topleft)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -57,13 +62,69 @@ def menu_inicial():
                 sys.exit()
 
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-                if botao_play.collidepoint(evento.pos):
+                if botao_back.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
+                    return  # volta ao menu
+
+            if evento.type == pygame.KEYDOWN:
+                # ESC, Enter, Espaço ou Backspace também voltam
+                if evento.key in (pygame.K_ESCAPE, pygame.K_RETURN, pygame.K_SPACE, pygame.K_BACKSPACE):
                     SOM_BOTAO.play()
                     return
 
-            if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
-                SOM_BOTAO.play()
-                return
+        pygame.display.flip()
+        clock.tick(60)
+
+
+# --- Tela de menu inicial ---
+def menu_inicial():
+    # Botão PLAY (coincide com a arte do "Play")
+    botao_play = pygame.Rect(LARGURA_TELA // 2 - 180, 620, 360, 90)
+
+    # NOVO: Botão/ícone INFO no canto inferior direito (ajuste fino se quiser)
+    botao_info = pygame.Rect(630, 635, 70, 70)
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        tela.blit(IMG_INICIO, (0, 0))
+
+        # brilho opcional ao passar o mouse (PLAY)
+        if botao_play.collidepoint(mouse_pos):
+            s = pygame.Surface((botao_play.width, botao_play.height), pygame.SRCALPHA)
+            s.fill((255, 255, 255, 25))
+            tela.blit(s, botao_play.topleft)
+
+        # brilho opcional no INFO
+        if botao_info.collidepoint(mouse_pos):
+            s = pygame.Surface((botao_info.width, botao_info.height), pygame.SRCALPHA)
+            s.fill((255, 255, 255, 25))
+            tela.blit(s, botao_info.topleft)
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+                # Clicou PLAY
+                if botao_play.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
+                    return  # sai do menu e começa o jogo
+
+                # Clicou INFO
+                if botao_info.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
+                    tela_infos()  # abre a tela de instruções e volta depois
+
+            if evento.type == pygame.KEYDOWN:
+                # Enter/Espaço = Play
+                if evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                    SOM_BOTAO.play()
+                    return
+                # tecla "i" também abre a tela de infos
+                if evento.key == pygame.K_i:
+                    SOM_BOTAO.play()
+                    tela_infos()
 
         pygame.display.flip()
         clock.tick(60)
