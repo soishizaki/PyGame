@@ -1,4 +1,4 @@
-# Maze Kitty Treasure Hunt 
+# Maze Kitty: Treasure Hunt 
 
 Jogo 2D em Python onde você controla um gatinho em um labirinto, tentando chegar à saída antes do tempo acabar.
 
@@ -22,7 +22,8 @@ Jogo 2D em Python onde você controla um gatinho em um labirinto, tentando chega
 3. Execute o arquivo jogo.py
 
 ## Demonstração do jogo em vídeo
-youtube
+Link do YouTube:
+https://youtu.be/Zi8IEtKEet8?si=awwFUbdwy8c-gcvO
 
 ## Fontes
 - Tiles: 
