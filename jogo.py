@@ -36,14 +36,14 @@ IMG_PROXIMA = pygame.transform.smoothscale(IMG_PROXIMA, (LARGURA_TELA, ALTURA_TE
 IMG_FINAL = pygame.image.load("img/fim.png").convert()
 IMG_FINAL = pygame.transform.smoothscale(IMG_FINAL, (LARGURA_TELA, ALTURA_TELA))
 
-# NOVO: tela de instruções (infos)
+# Tela de instruções (infos)
 IMG_INFO = pygame.image.load("img/infos.png").convert()
 IMG_INFO = pygame.transform.smoothscale(IMG_INFO, (LARGURA_TELA, ALTURA_TELA))
 
 
 # --- Tela de informações (Instructions) ---
 def tela_infos():
-    # Retângulo clicável do BACK (ajuste conforme a posição do seu botão na arte)
+    # Retângulo clicável do BACK (posição para 800x800)
     botao_back = pygame.Rect(600, 712, 142, 60)
 
     while True:
@@ -61,16 +61,18 @@ def tela_infos():
                 pygame.quit()
                 sys.exit()
 
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                if evento.key in (pygame.K_RETURN, pygame.K_SPACE, pygame.K_BACKSPACE):
+                    SOM_BOTAO.play()
+                    return
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_back.collidepoint(evento.pos):
                     SOM_BOTAO.play()
                     return  # volta ao menu
-
-            if evento.type == pygame.KEYDOWN:
-                # ESC, Enter, Espaço ou Backspace também voltam
-                if evento.key in (pygame.K_ESCAPE, pygame.K_RETURN, pygame.K_SPACE, pygame.K_BACKSPACE):
-                    SOM_BOTAO.play()
-                    return
 
         pygame.display.flip()
         clock.tick(60)
@@ -78,10 +80,10 @@ def tela_infos():
 
 # --- Tela de menu inicial ---
 def menu_inicial():
-    # Botão PLAY (coincide com a arte do "Play")
+    # Botão PLAY (coincide com a arte do "Play" em 800x800)
     botao_play = pygame.Rect(LARGURA_TELA // 2 - 180, 620, 360, 90)
 
-    # NOVO: Botão/ícone INFO no canto inferior direito (ajuste fino se quiser)
+    # Botão/ícone INFO
     botao_info = pygame.Rect(630, 635, 70, 70)
 
     while True:
@@ -105,26 +107,24 @@ def menu_inicial():
                 pygame.quit()
                 sys.exit()
 
-            if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
-                # Clicou PLAY
-                if botao_play.collidepoint(evento.pos):
-                    SOM_BOTAO.play()
-                    return  # sai do menu e começa o jogo
-
-                # Clicou INFO
-                if botao_info.collidepoint(evento.pos):
-                    SOM_BOTAO.play()
-                    tela_infos()  # abre a tela de instruções e volta depois
-
             if evento.type == pygame.KEYDOWN:
-                # Enter/Espaço = Play
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
                 if evento.key in (pygame.K_RETURN, pygame.K_SPACE):
                     SOM_BOTAO.play()
                     return
-                # tecla "i" também abre a tela de infos
                 if evento.key == pygame.K_i:
                     SOM_BOTAO.play()
                     tela_infos()
+
+            if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+                if botao_play.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
+                    return  # sai do menu e começa o jogo
+                if botao_info.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
+                    tela_infos()  # abre a tela de instruções
 
         pygame.display.flip()
         clock.tick(60)
@@ -149,14 +149,18 @@ def tela_proxima_fase():
                 pygame.quit()
                 sys.exit()
 
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                if evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                    SOM_BOTAO.play()
+                    return
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_next.collidepoint(evento.pos):
                     SOM_BOTAO.play()
                     return
-
-            if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
-                SOM_BOTAO.play()
-                return
 
         pygame.display.flip()
         clock.tick(60)
@@ -183,14 +187,18 @@ def tela_final():
                 pygame.quit()
                 sys.exit()
 
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                if evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                    SOM_BOTAO.play()
+                    return "reiniciar"
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_play.collidepoint(evento.pos):
                     SOM_BOTAO.play()
                     return "reiniciar"
-
-            if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
-                SOM_BOTAO.play()
-                return "reiniciar"
 
         pygame.display.flip()
         clock.tick(60)
@@ -198,7 +206,7 @@ def tela_final():
 
 # --- Loop principal do jogo ---
 def main():
-    menu_inicial()  # escolhe a fase inicial (dificuldade)
+    menu_inicial()  # mostra o menu antes de começar
 
     pos_jogador = base.encontrar_inicio()
     vitoria = False
@@ -211,22 +219,26 @@ def main():
             if evento.type == pygame.QUIT:
                 rodando = False
 
-            if evento.type == pygame.KEYDOWN and not vitoria:
-                nova_linha, nova_coluna = pos_jogador
+            if evento.type == pygame.KEYDOWN:
+                # ESC fecha o jogo a partir da fase
+                if evento.key == pygame.K_ESCAPE:
+                    rodando = False
+                if not vitoria:
+                    nova_linha, nova_coluna = pos_jogador
 
-                if evento.key == pygame.K_UP:
-                    nova_linha -= 1
-                elif evento.key == pygame.K_DOWN:
-                    nova_linha += 1
-                elif evento.key == pygame.K_LEFT:
-                    nova_coluna -= 1
-                elif evento.key == pygame.K_RIGHT:
-                    nova_coluna += 1
+                    if evento.key == pygame.K_UP:
+                        nova_linha -= 1
+                    elif evento.key == pygame.K_DOWN:
+                        nova_linha += 1
+                    elif evento.key == pygame.K_LEFT:
+                        nova_coluna -= 1
+                    elif evento.key == pygame.K_RIGHT:
+                        nova_coluna += 1
 
-                if posicao_valida(nova_linha, nova_coluna):
-                    pos_jogador = [nova_linha, nova_coluna]
-                    if base.LABIRINTO[nova_linha][nova_coluna] in (2, 3, 4):
-                        vitoria = True
+                    if posicao_valida(nova_linha, nova_coluna):
+                        pos_jogador = [nova_linha, nova_coluna]
+                        if base.LABIRINTO[nova_linha][nova_coluna] in (2, 3, 4):
+                            vitoria = True
 
         tela.fill(COR_FUNDO)
         desenhar_labirinto(tela)
@@ -235,7 +247,6 @@ def main():
 
         if vitoria:
             if base.fase_atual < len(base.FASES) - 1:
-                # mostra a tela "Next Level" antes de seguir
                 tela_proxima_fase()
                 carregar_fase(base.fase_atual + 1)
                 pos_jogador = base.encontrar_inicio()
