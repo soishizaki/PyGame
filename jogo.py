@@ -39,7 +39,7 @@ IMG_FINAL = pygame.transform.smoothscale(IMG_FINAL, (LARGURA_TELA, ALTURA_TELA))
 
 # --- Tela de menu inicial ---
 def menu_inicial():
-    botao_play = pygame.Rect(LARGURA_TELA // 2 - 165, 650, 330, 90)
+    botao_play = pygame.Rect(LARGURA_TELA // 2 - 180, 620, 360, 90)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
