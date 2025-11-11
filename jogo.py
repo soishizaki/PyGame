@@ -4,40 +4,45 @@ import base
 from base import *
 
 pygame.init()
+pygame.mixer.init()  # inicializa o áudio
+
+# --- Música de fundo ---
+pygame.mixer.music.load("sons/fundo.mp3")  # carrega a música de fundo
+pygame.mixer.music.set_volume(0.4)         # volume da trilha (0.0 a 1.0)
+pygame.mixer.music.play(-1)                # -1 = loop infinito
+
+# --- Som de botão ---
+SOM_BOTAO = pygame.mixer.Sound("sons/botao.mp3")
+SOM_BOTAO.set_volume(0.8)  # volume do som de clique
 
 # --- Config da tela ---
 LARGURA_TELA = 800
 ALTURA_TELA = 800
 TITULO_JOGO = "Maze Kitty Treasure Hunt"
 COR_FUNDO = (30, 30, 30)
-COR_TEXTO = (255, 255, 255)  
+COR_TEXTO = (255, 255, 255)
 
 tela = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
 pygame.display.set_caption(TITULO_JOGO)
 clock = pygame.time.Clock()
 
-# === imagem de início  ===
-ASSETS = Path(__file__).parent / "img"
-IMG_INICIO = pygame.image.load(ASSETS / "inicio.png").convert()
+# === imagens ===
+IMG_INICIO = pygame.image.load("img/inicio.png").convert()
 IMG_INICIO = pygame.transform.smoothscale(IMG_INICIO, (LARGURA_TELA, ALTURA_TELA))
 
-# === imagem próxima fase ===
-IMG_PROXIMA = pygame.image.load(ASSETS / "proxima_fase.png").convert()
+IMG_PROXIMA = pygame.image.load("img/proxima_fase.png").convert()
 IMG_PROXIMA = pygame.transform.smoothscale(IMG_PROXIMA, (LARGURA_TELA, ALTURA_TELA))
 
-# === imagem de vitória final ===
-IMG_FINAL = pygame.image.load(ASSETS / "fim.png").convert()
+IMG_FINAL = pygame.image.load("img/fim.png").convert()
 IMG_FINAL = pygame.transform.smoothscale(IMG_FINAL, (LARGURA_TELA, ALTURA_TELA))
 
 
 # --- Tela de menu inicial ---
 def menu_inicial():
-    
     botao_play = pygame.Rect(LARGURA_TELA // 2 - 165, 650, 330, 90)
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
-
         tela.blit(IMG_INICIO, (0, 0))
 
         # brilho opcional ao passar o mouse
@@ -47,20 +52,25 @@ def menu_inicial():
             tela.blit(s, botao_play.topleft)
 
         for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_play.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
                     return
 
             if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                SOM_BOTAO.play()
                 return
-
 
         pygame.display.flip()
         clock.tick(60)
 
+
 # --- Tela de próxima fase ---
 def tela_proxima_fase():
-    
     botao_next = pygame.Rect(LARGURA_TELA // 2 - 200, 620, 400, 100)
 
     while True:
@@ -77,22 +87,24 @@ def tela_proxima_fase():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_next.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
                     return
+
             if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                SOM_BOTAO.play()
                 return
 
         pygame.display.flip()
         clock.tick(60)
 
 
-
 # --- Tela de final/restart ---
 def tela_final():
-    
     botao_play = pygame.Rect(LARGURA_TELA // 2 - 205, 617, 410, 95)
-    
+
     while True:
         mouse_pos = pygame.mouse.get_pos()
         tela.blit(IMG_FINAL, (0, 0))
@@ -109,10 +121,14 @@ def tela_final():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
             if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
                 if botao_play.collidepoint(evento.pos):
+                    SOM_BOTAO.play()
                     return "reiniciar"
+
             if evento.type == pygame.KEYDOWN and evento.key in (pygame.K_RETURN, pygame.K_SPACE):
+                SOM_BOTAO.play()
                 return "reiniciar"
 
         pygame.display.flip()
@@ -148,11 +164,7 @@ def main():
 
                 if posicao_valida(nova_linha, nova_coluna):
                     pos_jogador = [nova_linha, nova_coluna]
-                    if base.LABIRINTO[nova_linha][nova_coluna] == 2:
-                        vitoria = True
-                    elif base.LABIRINTO[nova_linha][nova_coluna] == 3:
-                        vitoria = True
-                    elif base.LABIRINTO[nova_linha][nova_coluna] == 4:
+                    if base.LABIRINTO[nova_linha][nova_coluna] in (2, 3, 4):
                         vitoria = True
 
         tela.fill(COR_FUNDO)
@@ -176,7 +188,6 @@ def main():
                     vitoria = False
                 else:
                     rodando = False
-
 
     pygame.quit()
     sys.exit()
